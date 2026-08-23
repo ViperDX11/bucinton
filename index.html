@@ -21,7 +21,7 @@
 
   <!-- Supaya tampil fullscreen tanpa address bar di iOS -->
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Bucinton">
 
   <style>
@@ -32,5 +32,18 @@
 <body>
   <!-- GANTI URL DI BAWAH INI DENGAN LINK WEB APP ANDA (yang berakhiran /exec) -->
   <iframe src="https://script.google.com/macros/s/AKfycbyMTYWq68psOCeblD_a_3NLstG5jyUw9r6V84H9RaLt5LfwlRFzU2hHqYrXK5DGw3sz/exec"></iframe>
+  <script>
+    // Terima kabar dari app di dalam iframe soal tema yang sedang aktif (Light/Auto/Dark), supaya
+    // warna latar wrapper ini ikut sinkron - ini yang kelihatan saat overscroll/pantulan scroll di iOS.
+    window.addEventListener('message', function(e) {
+      if (e.data && e.data.type === 'bucintonTheme') {
+        var color = e.data.isDark ? '#121212' : '#F7F8FA';
+        document.documentElement.style.background = color;
+        document.body.style.background = color;
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', e.data.isDark ? '#121212' : '#1F3864');
+      }
+    });
+  </script>
 </body>
 </html>
