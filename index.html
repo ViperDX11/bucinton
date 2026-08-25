@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, viewport-fit=cover">
   <title>Bucinton Tournament</title>
 
   <!-- Mempercepat koneksi awal ke server Google -->
@@ -25,17 +25,9 @@
   <meta name="apple-mobile-web-app-title" content="Bucinton">
 
  <style>
-    html, body { margin: 0; padding: 0; height: 100dvh; overflow: hidden; background: #F7F8FA; }
-    body {
-      /* Dorong konten menjauhi notch/home indicator - INI bagian yang tadinya belum ada,
-         padahal meta viewport-fit=cover di atas sudah lama terpasang. Tanpa baris ini,
-         browser tahu boleh "menutupi" area aman, tapi tidak tahu ke mana harus menggeser konten. */
-      padding-top: env(safe-area-inset-top);
-      padding-bottom: env(safe-area-inset-bottom);
-      box-sizing: border-box;
-    }
+    html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #F7F8FA; }
     iframe { width: 100%; height: 100%; border: none; display: block; }
-  </style>
+  </style> 
 </head>
 <body>
   <!-- GANTI URL DI BAWAH INI DENGAN LINK WEB APP ANDA (yang berakhiran /exec) -->
