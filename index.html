@@ -21,7 +21,7 @@
 
   <!-- Supaya tampil fullscreen tanpa address bar di iOS -->
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Bucinton">
 
  <style>
@@ -29,19 +29,17 @@
       margin: 0; 
       padding: 0; 
       height: 100%; 
-      overflow: hidden; 
+      overflow: auto; 
     -webkit-overflow-scrolling: touch; 
       /* Mengubah background utama menjadi hitam agar white bar hilang */
       background: #121212; 
     }
     iframe { 
       width: 100%; 
-      /* SOLUSI: Menggunakan dvh (Dynamic Viewport Height) agar pas dengan layar iOS */
-      height: 100dvh; 
+      /* SOLUSI: Mengurangi tinggi total layar dengan tinggi safe area atas (status bar) */
+      height: calc(100dvh - env(safe-area-inset-top, 20px)); 
       border: none; 
       display: block; 
-      /* Menghilangkan potensi ruang kosong di bawah elemen inline */
-      vertical-align: bottom; 
   }
   </style> 
 </head>
