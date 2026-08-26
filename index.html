@@ -36,9 +36,12 @@
     }
     iframe { 
       width: 100%; 
-      height: 100%; 
+      /* SOLUSI: Menggunakan dvh (Dynamic Viewport Height) agar pas dengan layar iOS */
+      height: 100dvh; 
       border: none; 
       display: block; 
+      /* Menghilangkan potensi ruang kosong di bawah elemen inline */
+      vertical-align: bottom; 
   }
   </style> 
 </head>
