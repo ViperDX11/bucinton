@@ -29,17 +29,20 @@
       margin: 0; 
       padding: 0; 
       height: 100%; 
-      overflow: hidden; 
+      overflow: auto; 
+    -webkit-overflow-scrolling: touch; 
       /* Mengubah background utama menjadi hitam agar white bar hilang */
       background: #000000; 
     }
     iframe { 
-      width: 100%; 
-      /* Menggunakan viewport height penuh */
-      height: 100vh; 
-      border: none; 
-      display: block; 
-    }
+    width: 100%; 
+    /* Menggunakan tinggi dinamis safe area */
+    height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    /* Memberikan jarak atas agar tidak menabrak status bar */
+    margin-top: env(safe-area-inset-top);
+    border: none; 
+    display: block; 
+  }
   </style> 
 </head>
 <body>
