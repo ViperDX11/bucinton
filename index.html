@@ -12,7 +12,11 @@
 
   <!-- Web App Manifest untuk fitur "Install app" di Android Chrome -->
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#121212">
+  <!-- Warna fallback sebelum pesan tema pertama diterima dari iframe (lihat script di bawah).
+       SENGAJA dibuat gelap secara permanen (bukan mengikuti tema aktif) - kedipan gelap→terang
+       (kalau tema aktif ternyata Light) jauh lebih halus dilihat dibanding terang→gelap. Jadi
+       tidak perlu diubah lagi tiap ganti tema, kecuali Anda ingin menyesuaikan lebih lanjut. -->
+  <meta name="theme-color" id="metaThemeColor" content="#121212">
   <meta name="mobile-web-app-capable" content="yes">
 
   <!-- Ikon untuk Add to Home Screen -->
@@ -24,27 +28,43 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Bucinton">
 
- <style>
-    html, body { 
-      margin: 0; 
-      padding: 0; 
-      height: 100%; 
-      overflow: auto; 
-    -webkit-overflow-scrolling: touch; 
-      /* Mengubah background utama menjadi hitam agar white bar hilang */
-      background: #121212; 
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+      /* Warna fallback (sama seperti meta theme-color di atas) - langsung ditimpa begitu pesan
+         tema pertama diterima dari iframe lewat script di bawah. Sengaja dibuat gelap secara
+         permanen (lihat komentar di meta theme-color) - tidak perlu ikut diubah tiap ganti tema. */
+      background: #121212;
     }
-    iframe { 
-      width: 100%; 
-      /* SOLUSI: Mengurangi tinggi total layar dengan tinggi safe area atas (status bar) */
-      height: calc(100dvh - env(safe-area-inset-top, 20px)); 
-      border: none; 
-      display: block; 
-  }
-  </style> 
+    iframe {
+      width: 100%;
+      /* Mengurangi tinggi total layar dengan tinggi safe area atas (status bar) */
+      height: calc(100dvh - env(safe-area-inset-top, 20px));
+      border: none;
+      display: block;
+    }
+  </style>
 </head>
 <body>
   <!-- GANTI URL DI BAWAH INI DENGAN LINK WEB APP ANDA (yang berakhiran /exec) -->
   <iframe src="https://script.google.com/macros/s/AKfycbzNAgO2W1lOIyA5sWVx6hr3aKSqhhvAXKBXSyB71y2RqiBoBwmYvX5DTnmI8VN7nlc3/exec"></iframe>
+
+  <script>
+    // Dengarkan pesan tema dari Form.html (di dalam iframe) - dikirim setiap kali tema aktif
+    // diterapkan (baik saat app pertama dibuka, maupun saat admin ganti tema di Theme Settings).
+    // Ini yang bikin warna latar & status bar-area index.html ini otomatis menyesuaikan, tanpa
+    // perlu edit manual tiap kali warna tema berubah.
+    window.addEventListener('message', function(e) {
+      if (!e.data || e.data.type !== 'bucintonTheme' || !e.data.bgPage) return;
+      document.body.style.background = e.data.bgPage;
+      document.documentElement.style.background = e.data.bgPage;
+      const meta = document.getElementById('metaThemeColor');
+      if (meta) meta.setAttribute('content', e.data.bgPage);
+    });
+  </script>
 </body>
 </html>
