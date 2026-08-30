@@ -47,9 +47,44 @@
       border: none;
       display: block;
     }
+    /* Splash screen - tampil SEJAK DETIK PERTAMA halaman ini dibuka (disajikan lewat CDN GitHub
+       Pages yang sangat cepat, TIDAK terpengaruh delay cold-start Apps Script di dalam iframe),
+       menutupi proses loading iframe di baliknya sampai app di dalamnya benar-benar siap. */
+    #splashScreen {
+      position: fixed;
+      inset: 0;
+      background: #121212;
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      transition: opacity 0.3s ease;
+    }
+    #splashScreen img {
+      width: 160px;
+      height: 160px;
+    }
+    #splashScreen div {
+      color: #b2a36f;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      font-family: Arial, Helvetica, sans-serif;
+    }
   </style>
 </head>
 <body>
+  <!-- Splash screen - disembunyikan lewat script di bawah setelah app di dalam iframe mengirim
+       sinyal "siap" (pesan bucintonTheme, dikirim Form.html di langkah PALING TERAKHIR proses
+       inisialisasinya) - bukan sekadar menunggu iframe "termuat", tapi menunggu app-nya
+       benar-benar SELESAI proses setup dan siap dipakai. -->
+  <div id="splashScreen">
+    <img src="loading.gif" alt="Loading">
+    <div>Loading...</div>
+  </div>
+
   <!-- GANTI URL DI BAWAH INI DENGAN LINK WEB APP ANDA (yang berakhiran /exec) -->
   <iframe src="https://script.google.com/macros/s/AKfycbzNAgO2W1lOIyA5sWVx6hr3aKSqhhvAXKBXSyB71y2RqiBoBwmYvX5DTnmI8VN7nlc3/exec"></iframe>
 
@@ -57,14 +92,31 @@
     // Dengarkan pesan tema dari Form.html (di dalam iframe) - dikirim setiap kali tema aktif
     // diterapkan (baik saat app pertama dibuka, maupun saat admin ganti tema di Theme Settings).
     // Ini yang bikin warna latar & status bar-area index.html ini otomatis menyesuaikan, tanpa
-    // perlu edit manual tiap kali warna tema berubah.
+    // perlu edit manual tiap kali warna tema berubah. Kemunculan PERTAMA pesan ini juga dipakai
+    // sebagai sinyal "app sudah siap" untuk menyembunyikan splash screen (lihat di bawah).
+    let splashHidden = false;
+    function hideSplash() {
+      if (splashHidden) return;
+      splashHidden = true;
+      const splash = document.getElementById('splashScreen');
+      if (!splash) return;
+      splash.style.opacity = '0';
+      setTimeout(function() { splash.style.display = 'none'; }, 300);
+    }
+
     window.addEventListener('message', function(e) {
       if (!e.data || e.data.type !== 'bucintonTheme' || !e.data.bgPage) return;
       document.body.style.background = e.data.bgPage;
       document.documentElement.style.background = e.data.bgPage;
       const meta = document.getElementById('metaThemeColor');
       if (meta) meta.setAttribute('content', e.data.bgPage);
+      hideSplash(); // sinyal pertama dari app di dalam iframe = app sudah siap
     });
+
+    // Lapisan pengaman independen - kalau untuk alasan apapun pesan di atas tidak pernah
+    // diterima (misal app di dalam iframe versi lama, atau gagal), splash tetap disembunyikan
+    // setelah 10 detik supaya tidak tersangkut selamanya menutupi app.
+    setTimeout(hideSplash, 10000);
   </script>
 </body>
 </html>
