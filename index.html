@@ -63,8 +63,8 @@
       transition: opacity 0.3s ease;
     }
     #splashScreen img {
-      width: 300px;
-      height: 300px;
+      width: 200px;
+      height: 200px;
     }
     #splashScreen div {
       color: #b2a36f;
@@ -89,15 +89,21 @@
   <iframe src="https://script.google.com/macros/s/AKfycbzNAgO2W1lOIyA5sWVx6hr3aKSqhhvAXKBXSyB71y2RqiBoBwmYvX5DTnmI8VN7nlc3/exec"></iframe>
 
   <script>
+    // --- LOG SEMENTARA untuk debugging - lihat di Console browser (F12 / Inspect) ---
+    const splashStartTime = performance.now();
+    console.log('[Splash] Ditampilkan pada t=0ms');
+
     // Dengarkan pesan tema dari Form.html (di dalam iframe) - dikirim setiap kali tema aktif
     // diterapkan (baik saat app pertama dibuka, maupun saat admin ganti tema di Theme Settings).
     // Ini yang bikin warna latar & status bar-area index.html ini otomatis menyesuaikan, tanpa
     // perlu edit manual tiap kali warna tema berubah. Kemunculan PERTAMA pesan ini juga dipakai
     // sebagai sinyal "app sudah siap" untuk menyembunyikan splash screen (lihat di bawah).
     let splashHidden = false;
-    function hideSplash() {
+    function hideSplash(reason) {
       if (splashHidden) return;
       splashHidden = true;
+      const elapsed = Math.round(performance.now() - splashStartTime);
+      console.log('[Splash] Disembunyikan pada t=' + elapsed + 'ms - alasan: ' + reason);
       const splash = document.getElementById('splashScreen');
       if (!splash) return;
       splash.style.opacity = '0';
@@ -106,17 +112,18 @@
 
     window.addEventListener('message', function(e) {
       if (!e.data || e.data.type !== 'bucintonTheme' || !e.data.bgPage) return;
+      console.log('[Splash] Pesan bucintonTheme diterima pada t=' + Math.round(performance.now() - splashStartTime) + 'ms');
       document.body.style.background = e.data.bgPage;
       document.documentElement.style.background = e.data.bgPage;
       const meta = document.getElementById('metaThemeColor');
       if (meta) meta.setAttribute('content', e.data.bgPage);
-      hideSplash(); // sinyal pertama dari app di dalam iframe = app sudah siap
+      hideSplash('pesan bucintonTheme diterima'); // sinyal pertama dari app di dalam iframe = app sudah siap
     });
 
     // Lapisan pengaman independen - kalau untuk alasan apapun pesan di atas tidak pernah
     // diterima (misal app di dalam iframe versi lama, atau gagal), splash tetap disembunyikan
     // setelah 10 detik supaya tidak tersangkut selamanya menutupi app.
-    setTimeout(hideSplash, 10000);
+    setTimeout(function() { hideSplash('timeout 10 detik - pesan tidak pernah diterima'); }, 10000);
   </script>
 </body>
 </html>
