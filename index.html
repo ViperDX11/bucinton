@@ -1,129 +1,103 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Bucinton Tournament</title>
-
-  <!-- Mempercepat koneksi awal ke server Google -->
-  <link rel="preconnect" href="https://script.google.com">
-  <link rel="preconnect" href="https://script.googleusercontent.com">
-  <link rel="dns-prefetch" href="https://script.google.com">
-
-  <!-- Web App Manifest untuk fitur "Install app" di Android Chrome -->
-  <link rel="manifest" href="manifest.json">
-  <!-- Warna fallback sebelum pesan tema pertama diterima dari iframe (lihat script di bawah).
-       SENGAJA dibuat gelap secara permanen (bukan mengikuti tema aktif) - kedipan gelap→terang
-       (kalau tema aktif ternyata Light) jauh lebih halus dilihat dibanding terang→gelap. Jadi
-       tidak perlu diubah lagi tiap ganti tema, kecuali Anda ingin menyesuaikan lebih lanjut. -->
-  <meta name="theme-color" id="metaThemeColor" content="#121212">
-  <meta name="mobile-web-app-capable" content="yes">
-
-  <!-- Ikon untuk Add to Home Screen -->
-  <link rel="apple-touch-icon" href="icon-180.png">
-  <link rel="icon" type="image/png" href="icon-192.png">
-
-  <!-- Supaya tampil fullscreen tanpa address bar di iOS -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Bucinton">
-
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: auto;
-      -webkit-overflow-scrolling: touch;
-      /* Warna fallback (sama seperti meta theme-color di atas) - langsung ditimpa begitu pesan
-         tema pertama diterima dari iframe lewat script di bawah. Sengaja dibuat gelap secara
-         permanen (lihat komentar di meta theme-color) - tidak perlu ikut diubah tiap ganti tema. */
-      background: #121212;
-    }
-    iframe {
-      width: 100%;
-      /* Mengurangi tinggi total layar dengan tinggi safe area atas (status bar) */
-      height: calc(100dvh - env(safe-area-inset-top, 20px));
-      border: none;
-      display: block;
-    }
-    /* Splash screen - tampil SEJAK DETIK PERTAMA halaman ini dibuka (disajikan lewat CDN GitHub
-       Pages yang sangat cepat, TIDAK terpengaruh delay cold-start Apps Script di dalam iframe),
-       menutupi proses loading iframe di baliknya sampai app di dalamnya benar-benar siap. */
-    #splashScreen {
-      position: fixed;
-      inset: 0;
-      background: #121212;
-      z-index: 99999;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 14px;
-      transition: opacity 0.3s ease;
-    }
-    #splashScreen img {
-      width: 200px;
-      height: 200px;
-    }
-    #splashScreen div {
-      color: #b2a36f;
-      font-size: 14px;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      font-family: Arial, Helvetica, sans-serif;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Bucinton Tournament — Maintenance</title>
+<style>
+  :root {
+    --navy: #1F3864;
+    --navy-light: #E8ECF3;
+    --bg: #F7F8FA;
+    --card: #FFFFFF;
+    --text: #1a1a1a;
+    --text-muted: #666;
+    --border: #eee;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100dvh;
+    background: var(--bg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text);
+  }
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    padding-top: calc(20px + env(safe-area-inset-top));
+    padding-bottom: calc(20px + env(safe-area-inset-bottom));
+  }
+  .card {
+    background: var(--card);
+    border-radius: 20px;
+    padding: 40px 28px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+  .icon-circle {
+    width: 84px;
+    height: 84px;
+    background: var(--navy-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    margin: 0 auto 20px;
+  }
+  h1 {
+    color: var(--navy);
+    font-size: 21px;
+    font-weight: 800;
+    margin: 0 0 10px;
+  }
+  p {
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin: 0 0 8px;
+  }
+  .note {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .dots span {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--navy);
+    margin: 0 3px;
+    opacity: 0.3;
+    animation: pulse 1.4s infinite ease-in-out;
+  }
+  .dots span:nth-child(2) { animation-delay: 0.2s; }
+  .dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes pulse {
+    0%, 80%, 100% { opacity: 0.3; transform: scale(0.85); }
+    40% { opacity: 1; transform: scale(1); }
+  }
+</style>
 </head>
 <body>
-  <!-- Splash screen - disembunyikan lewat script di bawah setelah app di dalam iframe mengirim
-       sinyal "siap" (pesan bucintonTheme, dikirim Form.html di langkah PALING TERAKHIR proses
-       inisialisasinya) - bukan sekadar menunggu iframe "termuat", tapi menunggu app-nya
-       benar-benar SELESAI proses setup dan siap dipakai. -->
-  <div id="splashScreen">
-    <img src="loading.gif" alt="Loading">
-    <div>Loading...</div>
+
+  <div class="card">
+    <div class="icon-circle">🛠️</div>
+    <h1>Sedang Dalam Perbaikan</h1>
+    <p>Aplikasi Bucinton Tournament sedang menjalani <b>pembaruan besar</b> dan untuk sementara tidak dapat diakses.</p>
+    <p>Mohon jangan memasukkan data baru dulu — skor, foto profil, atau perubahan lain mungkin tidak akan tersimpan selama proses ini berlangsung.</p>
+    <div class="dots" style="margin-top:20px;"><span></span><span></span><span></span></div>
+    <div class="note">Silakan cek kembali beberapa saat lagi. Terima kasih atas kesabarannya! 🏸</div>
   </div>
 
-  <!-- GANTI URL DI BAWAH INI DENGAN LINK WEB APP ANDA (yang berakhiran /exec) -->
-  <iframe src="https://script.google.com/macros/s/AKfycbzNAgO2W1lOIyA5sWVx6hr3aKSqhhvAXKBXSyB71y2RqiBoBwmYvX5DTnmI8VN7nlc3/exec"></iframe>
-
-  <script>
-    // --- LOG SEMENTARA untuk debugging - lihat di Console browser (F12 / Inspect) ---
-    const splashStartTime = performance.now();
-    console.log('[Splash] Ditampilkan pada t=0ms');
-
-    // Dengarkan pesan tema dari Form.html (di dalam iframe) - dikirim setiap kali tema aktif
-    // diterapkan (baik saat app pertama dibuka, maupun saat admin ganti tema di Theme Settings).
-    // Ini yang bikin warna latar & status bar-area index.html ini otomatis menyesuaikan, tanpa
-    // perlu edit manual tiap kali warna tema berubah. Kemunculan PERTAMA pesan ini juga dipakai
-    // sebagai sinyal "app sudah siap" untuk menyembunyikan splash screen (lihat di bawah).
-    let splashHidden = false;
-    function hideSplash(reason) {
-      if (splashHidden) return;
-      splashHidden = true;
-      const elapsed = Math.round(performance.now() - splashStartTime);
-      console.log('[Splash] Disembunyikan pada t=' + elapsed + 'ms - alasan: ' + reason);
-      const splash = document.getElementById('splashScreen');
-      if (!splash) return;
-      splash.style.opacity = '0';
-      setTimeout(function() { splash.style.display = 'none'; }, 300);
-    }
-
-    window.addEventListener('message', function(e) {
-      if (!e.data || e.data.type !== 'bucintonTheme' || !e.data.bgPage) return;
-      console.log('[Splash] Pesan bucintonTheme diterima pada t=' + Math.round(performance.now() - splashStartTime) + 'ms');
-      document.body.style.background = e.data.bgPage;
-      document.documentElement.style.background = e.data.bgPage;
-      const meta = document.getElementById('metaThemeColor');
-      if (meta) meta.setAttribute('content', e.data.bgPage);
-      hideSplash('pesan bucintonTheme diterima'); // sinyal pertama dari app di dalam iframe = app sudah siap
-    });
-
-    // Lapisan pengaman independen - kalau untuk alasan apapun pesan di atas tidak pernah
-    // diterima (misal app di dalam iframe versi lama, atau gagal), splash tetap disembunyikan
-    // setelah 10 detik supaya tidak tersangkut selamanya menutupi app.
-    setTimeout(function() { hideSplash('timeout 10 detik - pesan tidak pernah diterima'); }, 10000);
-  </script>
 </body>
 </html>
